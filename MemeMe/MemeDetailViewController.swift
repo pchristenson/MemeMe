@@ -27,18 +27,18 @@ class MemeDetailViewController: UIViewController {
         
         // an array of items to add to the nav bar
         var barItemsArray: [UIBarButtonItem] = [
-        UIBarButtonItem(barButtonSystemItem:  .Trash, target: self, action: "DeleteMeme"),
-        UIBarButtonItem(barButtonSystemItem:  .Edit, target: self, action: "EditMeme")
+        UIBarButtonItem(barButtonSystemItem:  .Trash, target: self, action: "deleteMeme"),
+        UIBarButtonItem(barButtonSystemItem:  .Edit, target: self, action: "editMeme")
         ] // an edit button, a trash can button
         
         // add the buttons to the navigation bar at top right
-        self.SegueDVNItem.setRightBarButtonItems(barItemsArray, animated: true)
+        SegueDVNItem.setRightBarButtonItems(barItemsArray, animated: true)
         
         
     }
     
     // function to delete a meme based on the user selected the trash can item from the detail view screen
-    func DeleteMeme()
+    func deleteMeme()
     {
         // Details for an alert that asks the user if they really want to delete the meme
         var refreshAlert = UIAlertController(title: "Delete Meme?", message: "Do you really want to delete this meme?", preferredStyle: UIAlertControllerStyle.Alert)
@@ -70,10 +70,10 @@ class MemeDetailViewController: UIViewController {
     }
     
     // function that is called when user selects edit button from the detail view screen
-    func EditMeme()
+    func editMeme()
     {
         // now do a perform segue with identifier to go back to edit screen
-        self.performSegueWithIdentifier("EditMemeSegue", sender: self)
+        performSegueWithIdentifier("EditMemeSegue", sender: self)
     }
     
 
@@ -83,7 +83,7 @@ class MemeDetailViewController: UIViewController {
         
         // The selected meme was passed to us from either the table view or collection view
         // set the image to the appropriate one
-        self.MemeImageView.image = self.selectedMeme.memeImage
+        MemeImageView.image = selectedMeme.memeImage
         
     }
     
@@ -103,7 +103,7 @@ class MemeDetailViewController: UIViewController {
             // set the class variables to tell the edit screen that we want to edit
             // a particular meme that already exists
             editViewController.editExisting = true
-            editViewController.indexExisting = self.selectedMemeIndex
+            editViewController.indexExisting = selectedMemeIndex
             
         }
     }

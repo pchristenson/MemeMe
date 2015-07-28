@@ -19,13 +19,13 @@ class SentMemesTableViewController: UIViewController, UITableViewDataSource, UIT
     var memes: [Meme]! // an array of memes
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
         // Add a "plus" button to the nav bar on the top right that calls newMemeFunc
-        self.tableNavItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "newMemeFunc"), animated: true)
+        tableNavItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "newMemeFunc"), animated: true)
         
         // hide the back button that comes by default
-        self.tableNavItem.setHidesBackButton(true, animated: true)
-        
-        super.viewWillAppear(animated)
+        tableNavItem.setHidesBackButton(true, animated: true)
         
         // get the shared model of memes and set it to our local class variable memes array
         let object = UIApplication.sharedApplication().delegate
@@ -35,7 +35,7 @@ class SentMemesTableViewController: UIViewController, UITableViewDataSource, UIT
     
     // Function to tell the table how many rows to display
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.memes.count
+        return memes.count
     }
     
     // function called for each row.  This is where we customize the table cell
@@ -43,7 +43,7 @@ class SentMemesTableViewController: UIViewController, UITableViewDataSource, UIT
         // get a new reusable cell
         let cell = tableView.dequeueReusableCellWithIdentifier("MemeCell") as! UITableViewCell
         // get a reference to the appropriate meme for this row in the table
-        let meme = self.memes[indexPath.row]
+        let meme = memes[indexPath.row]
         
         // Set the name and image
         cell.textLabel?.text = meme.topText! + " " + meme.bottomText!
@@ -73,7 +73,7 @@ class SentMemesTableViewController: UIViewController, UITableViewDataSource, UIT
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         // show the detailed view of the meme
-        self.performSegueWithIdentifier("ShowMemeDetailSegue", sender: self)
+        performSegueWithIdentifier("ShowMemeDetailSegue", sender: self)
         
     }
     
@@ -84,7 +84,7 @@ class SentMemesTableViewController: UIViewController, UITableViewDataSource, UIT
             let controller = segue.destinationViewController as!
             MemeDetailViewController
             // set the appropriate class variables for the destination
-            controller.selectedMeme = self.memes[myTableView.indexPathForSelectedRow()!.row]
+            controller.selectedMeme = memes[myTableView.indexPathForSelectedRow()!.row]
             controller.selectedMemeIndex = myTableView.indexPathForSelectedRow()!.row
             
         }       
@@ -93,7 +93,7 @@ class SentMemesTableViewController: UIViewController, UITableViewDataSource, UIT
     // Function called when user hits the "plus" button to add a new Meme.  Should invoke the editor.
     func newMemeFunc() {
         
-        self.performSegueWithIdentifier("newMeme2", sender: self)
+        performSegueWithIdentifier("newMeme2", sender: self)
     }
     
 }

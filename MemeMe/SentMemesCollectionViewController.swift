@@ -23,10 +23,10 @@ class SentMemesCollectionViewController: UIViewController, UICollectionViewDataS
         super.viewDidLoad()
         
         // Add a "plus" button to the nav bar on the top right that calls newMemeFunc
-        self.colNavItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "newMemeFunc"), animated: true)
+        colNavItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "newMemeFunc"), animated: true)
         
         // hide the back button that comes by default
-        self.colNavItem.setHidesBackButton(true, animated: true)
+        colNavItem.setHidesBackButton(true, animated: true)
         
     }
     
@@ -42,7 +42,7 @@ class SentMemesCollectionViewController: UIViewController, UICollectionViewDataS
     
     // Function to tell the table how many items to display
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.memes.count
+        return memes.count
     }
     
     // function called for each cell item.  This is where we customize the each cell
@@ -82,7 +82,7 @@ class SentMemesCollectionViewController: UIViewController, UICollectionViewDataS
             
             let indexPath = myCollectionView.indexPathForCell(sender as! UICollectionViewCell)
             // set the appropriate class variables for the destination
-            controller.selectedMeme = self.memes[indexPath!.row]
+            controller.selectedMeme = memes[indexPath!.row]
             controller.selectedMemeIndex = indexPath!.row
             
         }
@@ -108,8 +108,8 @@ class SentMemesCollectionViewController: UIViewController, UICollectionViewDataS
         layout collectionViewLayout: UICollectionViewLayout,
         insetForSectionAtIndex section: Int) -> UIEdgeInsets {
             
-            let topSpace: CGFloat = self.topLayoutGuide.length
-            let bottomSpace: CGFloat = self.bottomLayoutGuide.length
+            let topSpace: CGFloat = topLayoutGuide.length
+            let bottomSpace: CGFloat = bottomLayoutGuide.length
             
             let sectionInsets = UIEdgeInsets(top: topSpace, left: 0.0, bottom: bottomSpace, right: 0.0)
             
@@ -141,6 +141,6 @@ class SentMemesCollectionViewController: UIViewController, UICollectionViewDataS
     // Function called when user hits the "plus" button to add a new Meme.  Should invoke the editor.
     func newMemeFunc() {
         
-        self.performSegueWithIdentifier("newMeme", sender: self)
+        performSegueWithIdentifier("newMeme", sender: self)
     }
 }

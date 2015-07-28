@@ -31,20 +31,20 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         super.viewDidLoad()
        
         // Add a social share button to the top left of the screen that calls the sendMeme function
-        self.myNavigationItem.setLeftBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "sendMeme"), animated: true)
+        myNavigationItem.setLeftBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "sendMeme"), animated: true)
     
         // Add a cancel button to the top right of the screen that calls the cancelMeme function
-        self.myNavigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelMeme"), animated: true)
+        myNavigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancelMeme"), animated: true)
         
         // Hide the share button for now (until an image is selected for the meme)
-        self.myNavigationItem.leftBarButtonItem?.enabled = false
+        myNavigationItem.leftBarButtonItem?.enabled = false
         
         // hide the status bar
         UIApplication.sharedApplication().statusBarHidden = true
         
         // we need to have special handling if we came to this screen as a result
         // of someone wanting to edit an existing meme
-        if(self.editExisting == true)
+        if(editExisting == true)
         {
             // Get a reference to the memes array (our model) in the appDelegate
             let object = UIApplication.sharedApplication().delegate
@@ -53,15 +53,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             var existingMeme = appDelegate.memes[indexExisting]
             
             // set the editor components to match the existing meme that was selected
-            self.imagePickerView.image = existingMeme.original
-            self.unmodifiedImage = existingMeme.original
-            self.TopTextField.text = existingMeme.topText
-            self.BottomTextField.text = existingMeme.bottomText
+            imagePickerView.image = existingMeme.original
+            unmodifiedImage = existingMeme.original
+            TopTextField.text = existingMeme.topText
+            BottomTextField.text = existingMeme.bottomText
             
             // We can go ahead and enable the share button now because we have a valid meme already
-            self.myNavigationItem.leftBarButtonItem?.enabled = true
+            myNavigationItem.leftBarButtonItem?.enabled = true
             // Now that we have handled the edit special case, we can turn the flag off
-            self.editExisting = false
+            editExisting = false
         }
     }
     
@@ -71,8 +71,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         // Set the various font/text properties
         
         // remove the text background
-        self.TopTextField.backgroundColor = UIColor.clearColor()
-        self.BottomTextField.backgroundColor = UIColor.clearColor()
+        TopTextField.backgroundColor = UIColor.clearColor()
+        BottomTextField.backgroundColor = UIColor.clearColor()
         
         // approximate the "Impact" font, all caps, white with a black outline
         let memeTextAttributes = [
@@ -83,23 +83,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         ]
        
         // set the text properties for the top text field
-        self.TopTextField.defaultTextAttributes = memeTextAttributes
-        self.TopTextField.textAlignment = NSTextAlignment.Center
-        self.TopTextField.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
+        TopTextField.defaultTextAttributes = memeTextAttributes
+        TopTextField.textAlignment = NSTextAlignment.Center
+        TopTextField.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
         // set the properties for for the bottom text field
-        self.BottomTextField.defaultTextAttributes = memeTextAttributes
-        self.BottomTextField.textAlignment = NSTextAlignment.Center
-        self.BottomTextField.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
+        BottomTextField.defaultTextAttributes = memeTextAttributes
+        BottomTextField.textAlignment = NSTextAlignment.Center
+        BottomTextField.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
         
         // Tell the app to listen for keyboard notifications so we can respond appropriately
-        self.subscribeToKeyboardNotifications()
+        subscribeToKeyboardNotifications()
        
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         // stop listening for keyboard notifications
-        self.unsubscribeFromKeyboardNotifications()
+        unsubscribeFromKeyboardNotifications()
     }
     
     // Function called when user selects "Album" from the bottom toolbar
@@ -108,7 +108,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         imagePickerController.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-        self.presentViewController(imagePickerController, animated: true, completion: nil)
+        presentViewController(imagePickerController, animated: true, completion: nil)
     }
     
     // Function called when user selects the "camera" button from the bottom toolbar
@@ -117,7 +117,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePickerController.delegate = self
         // Have the image Picker controller invoke the phone camera to get the image
         imagePickerController.sourceType = UIImagePickerControllerSourceType.Camera
-        self.presentViewController(imagePickerController, animated: true, completion: nil)
+        presentViewController(imagePickerController, animated: true, completion: nil)
     }
     
     // Function called when the image picker controller dialog has finished and the user has selected an image
@@ -128,18 +128,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage
             {
                 // set the screen image to the one picked
-                self.imagePickerView.image = image
-                self.unmodifiedImage = image
-                self.myNavigationItem.leftBarButtonItem?.enabled = true
+                imagePickerView.image = image
+                unmodifiedImage = image
+                myNavigationItem.leftBarButtonItem?.enabled = true
             }
         // close the Image picker controller
-        self.dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     // User selected cancel from the image picker controller
     func imagePickerControllerDidCancel(picker: UIImagePickerController){
         // just dismiss the view and don't do anything else
-        self.dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     // Function called as soon as the user wants to edit either the top or bottom text
@@ -178,19 +178,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // Function called when the app will display the keyboard to the user
     func keyboardWillShow(notification: NSNotification) {
         // store the original origin before modifying it
-        self.originalViewOrigin = self.view.frame.origin.y
+        originalViewOrigin = view.frame.origin.y
         
         // Move everything up if the user is typing in the bottom text field so 
         // the keyboard doesn't block the text
-        if self.BottomTextField.isFirstResponder() {
-            self.view.frame.origin.y -= getKeyboardHeight(notification)
+        if BottomTextField.isFirstResponder() {
+            //view.frame.origin.y -= getKeyboardHeight(notification)
+            
+            //Some of the custom keyboards (like swype) can incorrectly report 
+            // keyboardWillShow notification multiple times. In this case your 
+            // view will slide up higher than it should be if using the line above.
+            // To solve, change to below line of code.
+            view.frame.origin.y = -getKeyboardHeight(notification)
         }
     }
     
     // Function called before the keyboard goes away
     func keyboardWillHide(notification: NSNotification) {
         // restore the origin back to what it was before
-        self.view.frame.origin.y = self.originalViewOrigin
+        view.frame.origin.y = originalViewOrigin
         
     }
     
@@ -204,12 +210,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // Function called when user selects the social share button
     func sendMeme() {
         //Create the meme
-        self.memedImage = self.generateMemedImage()
+        memedImage = generateMemedImage()
         
         // set up the Activity View Controller and pass it the memed image
-        let nextController = UIActivityViewController(activityItems: [self.memedImage], applicationActivities: nil)
+        let nextController = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
         // show the controller
-        self.presentViewController(nextController, animated: true, completion: nil)
+        presentViewController(nextController, animated: true, completion: nil)
         
         // Set up the system to know what happens when the activity view controller is finished
         nextController.completionWithItemsHandler = myCompletionHandler
@@ -219,13 +225,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // function called when user selects "cancel" button from edit screen.  Should send back to
     // to the table/collection views
     func cancelMeme() {
-        self.performSegueWithIdentifier("CancelEdit", sender: self)
+        performSegueWithIdentifier("CancelEdit", sender: self)
     }
     
     // function to actually save the image into the model
     func save() {
         //Create the meme
-        var meme = Meme( topMemeText : self.TopTextField.text, bottomMemeText : self.BottomTextField.text, oldImage : self.unmodifiedImage, newImage : self.memedImage)
+        var meme = Meme( topMemeText : TopTextField.text, bottomMemeText : BottomTextField.text, oldImage : unmodifiedImage, newImage : memedImage)
         
         // Add it to the memes array in the Application Delegate
         let object = UIApplication.sharedApplication().delegate
@@ -245,11 +251,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             save()  // actually save the meme now since it was successfully sent
             
             // now do a perform segue with identifier
-            self.performSegueWithIdentifier("SeeSavedMemes", sender: self)
+            performSegueWithIdentifier("SeeSavedMemes", sender: self)
             
         }
         else{ // user must have selected cancel or something else didn't work
-            self.dismissViewControllerAnimated(true, completion: nil)
+            dismissViewControllerAnimated(true, completion: nil)
         }
     }
 
@@ -257,23 +263,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func generateMemedImage() -> UIImage {
     
         // hide the top and bottom toolbars before grabbing the image
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        self.navigationController?.navigationBar.hidden = true
+        navigationController?.setNavigationBarHidden(true, animated: true)
+        navigationController?.navigationBar.hidden = true
         UIApplication.sharedApplication().statusBarHidden = true
-        self.MyBottomToolbar.hidden = true
+        MyBottomToolbar.hidden = true
         
         // Render view to an image
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        self.view.drawViewHierarchyInRect(self.view.frame,
+        UIGraphicsBeginImageContext(view.frame.size)
+        view.drawViewHierarchyInRect(view.frame,
             afterScreenUpdates: true)
         // save the entire image with text
         let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
         // now turn the toolbars back on
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        self.navigationController?.navigationBar.hidden = false
-        self.MyBottomToolbar.hidden = false
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.navigationBar.hidden = false
+        MyBottomToolbar.hidden = false
         
         return memedImage
     }

@@ -10,7 +10,7 @@
 import Foundation
 import UIKit
 
-class Meme {
+struct Meme {
     
     // class variables
     var topText : String?  // text at the top of the meme
@@ -20,10 +20,10 @@ class Meme {
     
     // initialize the class instance with passed in variables
     init (topMemeText : String, bottomMemeText : String, oldImage : UIImage, newImage : UIImage) {
-        self.topText = topMemeText
-        self.bottomText = bottomMemeText
-        self.original = oldImage
-        self.memeImage = newImage
+        topText = topMemeText
+        bottomText = bottomMemeText
+        original = oldImage
+        memeImage = newImage
     }
     
 }
